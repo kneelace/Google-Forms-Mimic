@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Adding Questions</title>
+
+<link type="text/css" rel="stylesheet" href="bootstrap.min.css" />
+<style>
+.addQuestionButton{
+  border: none;
+  width: 32px;
+  height: 32px;
+  background-color: #eee;
+  transition: all ease-in-out 0.2s;
+  cursor: pointer;
+}
+.addQuestionButton:hover{
+  border: 1px solid #888;
+  background-color: #ddd;
+}
+</style>
+
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<script
+src="https//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script>
+$(function() {
+
+	var questionNo = -1;
+	
+	function createQuestion() {
+		
+		questionNo = questionNo + 1;
+		var fieldset = $("<fieldset />");
+		$("#questionDetails").append(fieldset);
+		fieldset.append("<legend>Question "+ (questionNo+1)+"</legend>");
+
+		// Question 
+		$(fieldset).append("Question: ");
+		var questionTitle = $("<input/>");
+		questionTitle.attr("name","questionList["+questionNo+"].question");
+		$(fieldset).append(questionTitle);
+
+
+		// Choice options
+		var inputOptionChoice = $("<select/>");
+		inputOptionChoice.attr("id","optionChoice");
+		inputOptionChoice.attr("class","optionChoice");
+
+		var selectOptions = $("<option/>")
+		    .attr("value", "radios")
+		    .text("Radio");
+		inputOptionChoice.append(selectOptions);
+		$(fieldset).append(inputOptionChoice);
+		
+		selectOptions = $("<option/>")
+		.attr("value", "checkboxes")
+		.text("Checkboxes");
+		inputOptionChoice.append(selectOptions);
+		$(fieldset).append(inputOptionChoice);
+		
+		
+		var inputType = "radio";
+		
+		// On Change in answer Choice	
+		$(fieldset).find( '.optionChoice' ).change(function() {
+			if($(fieldset).find('.optionChoice').val()=="checkboxes"){
+					inputType = "checkbox";		
+			} else if($(fieldset).find('.optionChoice').val() == "radios") { 
+				inputType = "radio";		
+			}
+			
+			
+			$(fieldset).find('.answerOptions').each(function(i) {
+				
+		       /*  $(this).html('<input type="' + inputType + '" name=questionList['+questionNo+'].option['+noOfAnswerChoice+'] >'); */
+		       $(fieldset).find('.answerOptions').attr("type",inputType);
+		      });
+			
+		});
+		
+		
+
+
+		// Answer Options
+
+		//Default Option
+		$(fieldset).append("<div id='addOptionButtonDiv' class='addOptionButtonDiv'></div><br>");
+
+		var noOfAnswerChoice = 0;
+		var option = $("<input type='"+inputType+"'/>");
+		option
+			.attr("name","questionList["+questionNo+"].option["+noOfAnswerChoice+"]")
+		 .addClass("answerOptions")
+		 . attr('disabled', true);
+		//$(fieldset).append(option);
+		$(fieldset).find('div').append("<br>");
+		$(fieldset).find('div').append(option);
+		
+		// Text field for answer option
+		var optionField = $("<input/>");
+		//optionField.attr("name","questionList["+questionNo+"].question");
+		optionField.attr("name","answerOptionTextField["+noOfAnswerChoice+"]");
+		optionField.attr("class","answerOptionTextField");
+		optionField.attr("id","answerOptionTextField["+noOfAnswerChoice+"]");
+		optionField.attr("placeholder","Option "+(noOfAnswerChoice+1)+"");
+		$(fieldset).find('div').append(optionField);
+		
+		$(fieldset).find('div').append("<br>");
+
+
+
+		// Add Answer options
+		var addOptionButton = $("<button />");
+		$(fieldset).append(addOptionButton);
+		addOptionButton.attr("class", "addOptionButton");
+		addOptionButton.attr("id", "addOptionId");
+		addOptionButton.attr("title", "Add Option");
+		addOptionButton.text("Add Option");
+
+
+		// OnClick Event on Add Options
+		$(fieldset).on("click", ".addOptionButton", function() {
+		 
+		noOfAnswerChoice = noOfAnswerChoice + 1;
+		 
+		 var option = $("<input type='"+inputType+"'/>");
+		 option
+		 .attr("name","questionList["+questionNo+"].option["+noOfAnswerChoice+"]")
+		 .addClass("answerOptions")
+		 .attr("id","option["+noOfAnswerChoice+"]")
+		 . attr('disabled', true);
+
+		 $(fieldset).find('div').append("<br>");
+		 $(fieldset).find('div').append(option);
+		 
+		// Text field for answer option
+		var optionField = $("<input/>");
+		optionField.attr("name","answerOptionTextField["+noOfAnswerChoice+"]");
+		optionField.attr("class","answerOptionTextField");
+		optionField.attr("id","answerOptionTextField["+noOfAnswerChoice+"]");
+		optionField.attr("placeholder","Option "+(noOfAnswerChoice+1)+"");
+		$(fieldset).find('div').append(optionField); 
+		
+		
+		// Setting value of answer options on from textfield
+		
+		/* $(fieldset).find('.answerOptionTextField').focusout(function() {
+		//$(fieldset).find('#answerOptionTextField['+noOfAnswerChoice+']').focusout(function() {
+			alert($(fieldset).find('#answerOptionTextField['+noOfAnswerChoice+']').val());
+			$(fieldset).find('#option['+noOfAnswerChoice+']').attr("value",$(fieldset).find('#answerOptionTextField['+noOfAnswerChoice+']').val());
+		}); */
+			
+		$(fieldset).find('div').append("<br>");
+		
+		
+		
+	/* 	// Select Correct Answer
+		var addOptionButton = $("<button />");
+		$(fieldset).append(addOptionButton);
+		addOptionButton.attr("class", "addOptionButton");
+		addOptionButton.attr("id", "addOptionId");
+		addOptionButton.attr("title", "Add Option");
+		addOptionButton.text("Add Option");
+		
+ */
+		 return false;
+		});
+		
+	    
+			return false;
+	}
+	
+	
+	
+	// Default Question
+	createQuestion();
+	
+	// Add Question
+	var addQuestionButton = $("<button />");
+	$("#addQuestionButton").append(addQuestionButton);
+	addQuestionButton.attr("class", "addQuestionButton");
+	addQuestionButton.attr("id", "addQuestionId");
+	addQuestionButton.attr("title", "Add Question");
+	addQuestionButton.text("+");
+	
+	// OnClick Event on Add Question
+	$("#addQuestionButton").on("click", ".addQuestionButton", function() {
+		// Added Question
+		createQuestion();
+		return false;
+	});
+	
+	
+	
+	
+	
+	
+});
+
+
+</script>
+</head>
+<body>
+
+<form id="assessmentForm" method="post">
+  <div id="questionDetails" class="questionDetails"></div>
+  <br>
+   <div id="addQuestionButton" class="addQuestionButton"></div>
+   <br><br><br>
+   <div id="formSubmitButton" class="formSubmitButton"></div>
+   <br><br><br>
+</form>
+
+
+</body>
+</html>
